@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+<mapper namespace="modulePro.MemberInfo">
+	<select id="MemberCnt" parameterType="modulePro.Member.vo.Member" resultType="int">
+		SELECT 
+			COUNT(*) AS CNT 
+		FROM 
+			USERINFO 
+		WHERE 
+			USER_ID = #{UserID} AND 
+			PASSWORD = #{Password}
+	</select>
+	
+	<select id="getUserPwd" parameterType="modulePro.Member.vo.Member" resultType="java.lang.String">
+		SELECT 
+			PASSWORD 
+		FROM 
+			USERINFO 
+		WHERE 
+			USER_ID = #{UserID}
+	</select>
+	<select id="getMemberInfo" parameterType="java.lang.String" resultType="modulePro.Member.vo.Member" >
+		SELECT 
+			USER_ID as userID,
+			PRO_ID as proID,
+			DIVISION AS division,
+			USER_NAME as userName,
+			PASSWORD as password,
+			SAVE_DATE as saveDate
+		FROM 
+			USERINFO 
+		WHERE 
+			USER_ID = #{UserID}
+	</select>
+</mapper>
