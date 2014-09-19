@@ -19,26 +19,26 @@
 	
 	<context:component-scan base-package="modulePro.Basic"></context:component-scan>
 	<context:component-scan base-package="modulePro.Main"></context:component-scan>
-	<context:component-scan base-package="modulePro.Process"></context:component-scan>
+	<context:component-scan base-package="modulePro.Project"></context:component-scan>
 	<context:component-scan base-package="modulePro.ModuleUnit"></context:component-scan>
 	<context:component-scan base-package="modulePro.Report.Controller"></context:component-scan>
 	<context:component-scan base-package="modulePro.AHP.Controller"></context:component-scan>
+	<context:component-scan base-package="modulePro.Member"></context:component-scan>
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven>
+	<!-- mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
 			<bean class = "org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 				<property name="supportedMediaTypes" value = "text/plain;charset=UTF-8" />
 			</bean>
 		</mvc:message-converters>		
-	</mvc:annotation-driven>
-
+	</mvc:annotation-driven -->
+	<mvc:annotation-driven />
+	<mvc:view-controller path="/" view-name="login" />
+	
 	<mvc:resources mapping="/images/**" location="/images/"  />
 	<mvc:resources mapping="/css/**" location="/css/"  />
 	<mvc:resources mapping="/js/**" location="/js/"  />
-	<mvc:resources mapping="/fancyapps/**" location="/fancyapps/"  />
-	
-	
 	    
 	 <bean
 		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
@@ -50,9 +50,15 @@
 		<property name="order" value="1" />
 	</bean>
 	
-
+	<!-- bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean -->
 	
-	<!-- bean class="org.springframework.web.servlet.view.XmlViewResolver" p:location="/WEB-INF/classes/config/spring/jasper-views.xml"  p:order="0" />
+	<mvc:interceptors>  
+        <bean  id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="lang"></property>
+        </bean>
+	</mvc:interceptors>
 	
-	<beans:import resource="jasper-views.xml"/-->
+	<bean id="localeResolver"  class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
 </beans>

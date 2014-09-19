@@ -22,6 +22,10 @@ $(function() {
 		$(this).slideUp(341);
 	});
 });
+
+<c:if test="${message != '' && message ne null }">
+alert("${message}");
+</c:if>
 </script>
 
 </head>
@@ -41,13 +45,13 @@ $(function() {
 	<h2>Login</h2>
 	<section>
 		<div class="error msg">Message if login failed</div>
-		<form action="<c:url value='/newProcess.do'/>">
+		<form action="j_spring_security_check" method="post">
 			<dl>
-				<dt><label for="username">Username</label></dt>
-				<dd><input id="username" type="text" /></dd>
+				<dt><label for="j_username">Username</label></dt>
+				<dd><input id="username" name="j_username" type="text" /></dd>
 			
-				<dt><label for="adminpassword">Password</label></dt>
-				<dd><input id="adminpassword" type="password" /></dd>
+				<dt><label for="j_password">Password</label></dt>
+				<dd><input id="adminpassword" name="j_password" type="password" /></dd>
 			</dl>
 			<label><input type="checkbox" />Remember Me</label>
 			<p>

@@ -8,7 +8,9 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/style.css'/>">
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
+<!-- link rel="stylesheet" type="text/css" href="<c:url value='/css/style.css'/>" -->
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/skins/orange.css'/>" title="orange">
 
 <link rel="alternate stylesheet" type="text/css" href="<c:url value='/css/skins/orange.css'/>" title="orange">
@@ -46,37 +48,20 @@
 <script type="text/javascript" src="<c:url value='/js/jquery.cookie.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/switcher.js'/>"></script>
 
-<script type="text/javascript">
-/*
-jQuery(function($) {
 
-	
-	var d1 = [[1293814800000, 17], [1293901200000, 29], [1293987600000, 34], [1294074000000, 46], [1294160400000, 36], [1294246800000, 16], [1294333200000, 36]];
-    var d2 = [[1293814800000, 20], [1293901200000, 75], [1293987600000, 44], [1294074000000, 49], [1294160400000, 56], [1294246800000, 23], [1294333200000, 46]];
-    var d3 = [[1293814800000, 32], [1293901200000, 42], [1293987600000, 59], [1294074000000, 57], [1294160400000, 47], [1294246800000, 56], [1294333200000, 59]];
+<c:if test="${Availability != 'N' }">
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+<%/*
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 
-	$.plot($('#pageviews'), [
-        { label: 'Unique',  data: d1},
-        { label: 'Pages',  data: d2},
-        { label: 'Hits',  data: d3}
-    ], {
-		series: {
-			lines: { show: true },
-			points: { show: true }
-		},
-		xaxis: {
-			mode: 'time',
-			timeformat: '%b %d'
-		}
-	});
 
-});
-*/
-</script>
-<c:if test="${param.Availability != 'N' }">
+
 	<!-- Add jQuery library -->
 	<script type="text/javascript" src="<c:url value='/fancyapps/lib/jquery-1.10.1.min.js' />"></script>
-
 	<script type="text/javascript" src="<c:url value='/fancyapps/source/jquery.fancybox.js?v=2.1.5' />"></script>
 	<link rel="stylesheet" type="text/css" href="<c:url value='/fancyapps/source/jquery.fancybox.css?v=2.1.5' />" media="screen" />
 
@@ -113,13 +98,37 @@ $(document).ready(function() {
 	});
 	
 });
-
-
 </script>
+*/ %>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('a#pop').live('click', function (e) {
+                e.preventDefault();
+                var page = $(this).attr("href")
+                var pagetitle = $(this).attr("title")
+                var $dialog = $('<div style="overflow:hidden;"></div>')
+                .html('<iframe style="border: 0px; " src="' + page + '" width="100%" height="100%"></iframe>')
+                .dialog({
+                    autoOpen: false,
+                    modal: true,
+                    height: 625,
+                    width: 1100,
+                    title: pagetitle
+                });
+                $dialog.dialog('open');
+            });
+        });
+        
+        <c:if test="${msg != '' && msg ne null }">
+	    	alert('<c:out value="${msg }" />');
+	    </c:if>
+    </script>
+    
+    
 </c:if>
 </head>
 <body>
-<c:if test="${param.Availability != 'N' }">
+<c:if test="${Availability != 'N' }">
 <header id="top">
 	<div class="container_12 clearfix">
 		<div id="logo" class="grid_5">
@@ -141,7 +150,7 @@ $(document).ready(function() {
 		</div>
 
 		<div id="userinfo" class="grid_3">
-			Welcome, <a href="#">Administrator</a>
+			Welcome, <a href="#"><c:out value="${mem.getUserName() }" /></a>
 		</div>
 	</div>
 </header>
@@ -153,8 +162,8 @@ $(document).ready(function() {
 				<!--li class="current"><a href="dashboard.html">Dashboard</a></li-->
 				<li><a href="#">Process</a>
 					<ul>
-						<li><a href="<c:url value='/newProcess.do'/> ">New</a></li>
-						<li><a href="<c:url value='/processList.do'/> ">Open Project</a></li>
+						<li><a href="<c:url value='/projectNew.do'/> ">New</a></li>
+						<li><a href="<c:url value='/projectList.do'/> ">Open Project</a></li>
 					</ul>
 				</li>
 				<li><a href="#">Survey</a>
@@ -167,18 +176,32 @@ $(document).ready(function() {
 				<li><a href="#">타당성</a>
 					<ul>
 						<li><a href="#">타당성 평가</a></li>
-						<li><a id="fancybox-manual-c" href="javascript:;">AHP</a></li>
+						<c:choose>
+							<c:when test="${mem.getProID() ne null }">
+								<li><a href="AHP://${mem.getProID()}">AHP</a></li>
+							</c:when>
+							<c:otherwise>
+								<li><a href="#" onclick="javascript:alert('프로젝트를 선택해주세요.')">AHP</a></li>
+							</c:otherwise>
+						</c:choose>
 					</ul>
 				</li>
 				<li><a href="#">Module Unit</a>
 					<ul>
-						<li><a id="Labor_Density" href="javascript:;">Labor Density</a></li>
+						<c:choose>
+							<c:when test="${mem.getProID() ne null }">
+								<li><a href="SVG://${mem.getProID()}">Labor Density</a></li>
+							</c:when>
+							<c:otherwise>
+								<li><a href="#" onclick="javascript:alert('프로젝트를 선택해주세요.')">Labor Density</a></li>
+							</c:otherwise>
+						</c:choose>
 						<li><a href="<c:url value='/statistics.do'/> ">통계</a></li>
 						<li><a href="<c:url value='/reportView.do'/> ">Report</a></li>
 					</ul>
 				</li>
 				<li><a href="#">Rams</a></li>
-				<li><a id="fancybox-manual-b" href="javascript:;">가중계수</a></li>
+				<li><a id="pop" href="<c:url value='/AHP.do'/>">가중계수</a></li>
 				<!--li><a href="#">Sample Pages</a>
 					<ul>
 						<li><a href="news.html">News</a></li>
@@ -199,7 +222,7 @@ $(document).ready(function() {
 			</ul>
 			<ul id="usermenu">
 				<li><!--a href="#" class="inbox">Inbox (3)</a--></li>
-				<li><a href="AHP://">Logout</a></li>
+				<li><a href="j_spring_security_logout">Logout</a></li>
 			</ul>
 		</div>
 	</div>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+<mapper namespace="modulePro.Project">
+	<resultMap type="modulePro.Project.vo.Project" id="proResult">
+		<id property="proID" column="PRO_ID" />
+		<result property="userID" column="USER_ID" />
+		<result property="proUser" column="PRO_USER" />
+		<result property="proAppraisal" column="PRO_APPRAISAL" />
+		<result property="proName" column="PRO_NAME" />
+		<result property="proStartDate" column="PRO_STARTDATE" />
+		<result property="proEndDate" column="PRO_ENDDATE" />
+		<result property="proContact" column="PRO_CONTACT" />
+		<result property="proMemo" column="PRO_MEMO" />
+		<result property="saveDate" column="SAVEDATE" />
+	</resultMap>
+	
+	<insert id="insertProject" parameterType="modulePro.Project.vo.Project"> 
+		INSERT INTO PROINFO (
+			PRO_ID,
+			USER_ID,
+			PRO_USER,
+			PRO_APPRAISAL,
+			PRO_NAME,
+			PRO_STARTDATE,
+			PRO_ENDDATE,
+			PRO_CONTACT,
+			PRO_MEMO,
+			SAVEDATE
+		) VALUES(
+			PRO_SEQ.NEXTVAL,
+			#{userID},
+			#{proUser},
+			#{proAppraisal,jdbcType=VARCHAR},
+			#{proName},
+			#{proStartDate},
+			#{proEndDate},
+			#{proContact,jdbcType=VARCHAR},
+			#{proMemo},
+			SYSDATE
+		)
+	</insert>
+	
+	<select id="selectProject" parameterType="java.lang.String" resultType="modulePro.Project.vo.Project">
+		SELECT
+			PRO_ID AS proID,
+			USER_ID AS userID,
+			PRO_USER AS proUser,
+			PRO_APPRAISAL AS proAppraisal,
+			PRO_NAME AS proName,
+			PRO_STARTDATE AS proStartDate,
+			PRO_ENDDATE AS proEndDate,
+			PRO_CONTACT AS proContact,
+			PRO_MEMO AS proMemo,
+			SAVEDATE AS saveDate
+		FROM
+			PROINFO
+		WHERE 
+			PRO_ID = #{proID}
+	</select>
+	
+	<select id="listProjectCnt" parameterType="java.lang.String" resultType="int">
+		SELECT 
+			COUNT(*) AS CNT 
+		FROM 
+			PROINFO
+		WHERE 
+			USER_ID = #{userID} 
+			
+	</select>
+	
+	<select id="listProject" parameterType="java.util.Map" resultMap="proResult">	
+		SELECT 
+			PRO_ID AS proID,
+			USER_ID AS userID,
+			PRO_USER AS proUser,
+			PRO_APPRAISAL AS proAppraisal,
+			PRO_NAME AS proName,
+			PRO_STARTDATE AS proStartDate,
+			PRO_ENDDATE AS proEndDate,
+			PRO_CONTACT AS proContact,
+			PRO_MEMO AS proMemo,
+			SAVEDATE AS saveDate
+       FROM 
+			(
+			SELECT 
+				A.*,
+				FLOOR((ROWNUM - 1)/#{listNum} + 1) PAGE,
+				ROWNUM
+			FROM (
+					SELECT 
+						* 
+					FROM 
+						PROINFO 
+					ORDER BY 
+						PRO_ID 
+					DESC
+				) A
+			)
+       WHERE 
+			PAGE = #{pageNo} AND
+			USER_ID = #{userID}
+	</select>
+	
+	<update id="updateProject" parameterType="modulePro.Project.vo.Project">
+		INSERT INTO PROINFO (
+			PRO_ID,
+			USER_ID,
+			PRO_USER,
+			PRO_APPRAISAL,
+			PRO_NAME,
+			PRO_STARTDATE,
+			PRO_ENDDATE,
+			PRO_CONTACT,
+			PRO_MEMO,
+			SAVEDATE
+		) VALUES(
+			PRO_SEQ.NEXTVAL,
+			#{userID},
+			#{proUser},
+			#{proAppraisal,jdbcType=VARCHAR},
+			#{proName},
+			#{proStartDate},
+			#{proEndDate},
+			#{proContact,jdbcType=VARCHAR},
+			#{proMemo},
+			SYSDATE
+		)
+	</update>
+</mapper>
