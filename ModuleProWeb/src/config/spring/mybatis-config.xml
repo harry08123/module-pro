@@ -12,5 +12,7 @@
 	<!-- DB xml 파일 추가시 작 -->
 		<mapper resource="config/mapper/sql-member.xml" />
 		<mapper resource="config/mapper/sql-project.xml" />
+		<mapper resource="config/mapper/sql-editor.xml" />
+		<mapper resource="config/mapper/sql-engine.xml" />
 	</mappers>
 </configuration>

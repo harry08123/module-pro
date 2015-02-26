@@ -7,13 +7,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
-	<!-- bean id="memberService" class="modulePro.Member.service.MemberServiceImpl">
-		<property name="memberDAO">
-			<bean  class="modulePro.Member.dao.MemberDAOImpl">
-				<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-			</bean>
-		</property>
-	</bean-->
 	<bean id="memberService" class="modulePro.Member.service.MemberServiceImpl">
 		<property name="memberDAO">
 			<bean  class="modulePro.Member.dao.MemberDAOImpl">
@@ -24,6 +17,20 @@
 	<bean id="projectService" class="modulePro.Project.service.ProjectServiceImpl">
 		<property name="proDao">
 			<bean  class="modulePro.Project.dao.ProjectDAOImpl">
+				<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="editorService" class="modulePro.Editor.service.EditorServiceImpl">
+		<property name="editorDAO">
+			<bean  class="modulePro.Editor.dao.EditorDAOImpl">
+				<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="engineService" class="modulePro.Engine.service.EngineServiceImpl">
+		<property name="engineDAO">
+			<bean  class="modulePro.Engine.dao.EngineDAOImpl">
 				<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 			</bean>
 		</property>
