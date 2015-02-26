@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+<mapper namespace="modulePro.Engine">
+	<select id="getModelingList" parameterType="modulePro.Project.vo.Project" resultType="modulePro.Engine.vo.Modeling">
+	 SELECT MO_UID        AS moUid
+           ,MO_PROJECT    AS moProject
+           ,MO_NAME       AS moName
+           ,MO_TYPE       AS moType
+           ,MO_SX         AS moSx
+           ,MO_SY         AS moSy
+           ,MO_EX         AS moEx
+           ,MO_EY         AS moEy
+           ,MO_COLOR      AS moColor
+           ,MO_WIDTH      AS mo_width
+		   ,MO_HEIGHT     AS mo_height
+		   ,MO_RARDIUS    AS mo_rardius
+		   ,MO_PERSONS    AS mo_persons
+       FROM MODELING
+      WHERE 1=1
+      <if test="moProject != null and moProject != ''">
+        AND MO_PROJECT = #{moProject}
+      </if>
+      <if test="moUid != null and moUid != ''">
+        AND MO_UID = #{moUid}
+      </if>
+	</select>
+	
+	<select id="getFiguresList" parameterType="modulePro.Engine.vo.Modeling" resultType="modulePro.Engine.vo.SampleBean">
+      SELECT FIG_UID            AS figUid
+            ,FIG_MO_UID         AS figMoUid
+            ,FIG_MO_TYPE        AS figMoType
+            ,FIG_MO_NAME        AS figMoName
+            ,FIG_FAIL_MODE      AS figFailMode
+            ,FIG_FAILURE_STATE  AS figFailureState
+            ,FIG_FAILURE_TIME   AS figFailureTime
+            ,FIG_IMP_FAILURE    AS figImpFailure
+            ,FIG_MTTR           AS figMttr
+            ,FIG_IMP_REPAIR     AS figImpRepair
+            ,FIG_REMARK1        AS figRemark1
+            ,FIG_RANDOM_NUM     AS figRandomNum
+            ,FIG_PROJECT_UID    AS figProjectUid
+            ,FIG_DELIVERY       AS figDelivery
+            ,FIG_ART            AS figArt
+            ,TO_CHAR(NVL(FIG_SE_START_DAY, TO_DATE('19000101')), 'YYYY-MM-DD')   AS figSeStartDay
+            ,FIG_FREQ           AS figFreq
+            ,FIG_FREQ_UIT       AS figFreqUit
+            ,FIG_FLARING        AS figFlaring
+            ,FIG_EQ_REF         AS figEqRef
+            ,FIG_DISTRIBUTION   AS figDistribution
+            ,FIG_EXP_MTTF       AS figExpMttf
+            ,FIG_NORM_EXPT_MTTF AS figNormExptMttf
+            ,FIG_MIN_MTTF       AS figMinMttf
+            ,FIG_MAX_MTTF       AS figMaxMttf
+            ,FIG_MOST_MTTF      AS figMostMttf
+            ,FIG_WEI_CHAR_MTTF  AS figWeiCharMttf
+            ,FIG_WEI_SHAPE_MTTF AS figWeiShapeMttf
+            ,FIG_NORM_STD_MTTF  AS figNormStdMttf
+            ,FIG_WEI_DELTIME    AS figWeiDeltime
+            ,FIG_IMP_RECOV      AS figImpRecov
+            ,FIG_SUBSYSTEM      AS figSubsystem
+            ,FIG_TAGID          AS figTagid
+            ,FIG_REP_DISTRIBUTION AS figRepDistribution
+            ,FIG_REP_MOD_RELIA  AS figRepModRelia
+            ,FIG_REP_REPEAT     AS figRepRepeat
+            ,FIG_REP_UPTO       AS figRepUpto
+            ,FIG_CAP_LOSS       AS figCapLoss
+        FROM FIGURES
+       WHERE FIG_MO_UID = #{moUid}
+    </select>
+    
+</mapper>

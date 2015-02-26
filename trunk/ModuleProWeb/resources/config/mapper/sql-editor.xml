@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+<mapper namespace="modulePro.Editor">
+
+	<update id="updateEditorProject" parameterType="java.util.Map">
+		UPDATE PROJECT
+		   SET PRO_REGDATE = sysdate
+		   <if test="proIterNum != null and proIterNum != ''">
+		      ,PRO_ITERNUM = #{proIterNum}
+		   </if>
+		   <if test="proStartTime != null and proStartTime != ''">
+		      ,PRO_STARTTIME = #{proStartTime}
+		   </if>
+		   <if test="proLifeTime != null and proLifeTime != ''">
+		      ,PRO_LIFETIME = #{proLifeTime}
+		   </if>
+		   <if test="proTd != null and proTd != ''">
+		      ,PRO_TD = #{proTd}
+		   </if>
+		   <if test="proFile != null and proFile != ''">
+		      ,PRO_FILE = #{proFile}
+		   </if>
+		 WHERE PRO_UID = #{proUid}
+	</update>
+	
+	<insert id="insertEditorProject" parameterType="java.util.Map">
+		INSERT INTO PROJECT(
+		                    PRO_UID
+		                   ,PRO_ITERNUM
+		                   ,PRO_STARTTIME
+		                   ,PRO_LIFETIME
+		                   ,PRO_TD
+		                   ,PRO_REGDATE
+		                   ) VALUES (
+		                   #{mo_project}
+		                   ,10
+		                   ,0
+		                   ,20
+		                   ,365
+		                   ,SYSDATE
+		                   )
+	</insert>
+	
+	<select id="selectProjectList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT PRO_UID
+		      ,PRO_ITERNUM
+		      ,PRO_STARTTIME
+		      ,PRO_LIFETIME
+		      ,PRO_TD
+		      ,PRO_FILE
+		      ,PRO_REGDATE
+		  FROM PROJECT
+		 WHERE 1=1
+		 <if test="pro_uid != null and pro_uid != ''">
+		   AND PRO_UID = #{pro_uid}
+		 </if>
+		 <if test="mo_project != null and mo_project != ''">
+		   AND PRO_UID = #{mo_project}
+		 </if>
+	</select>
+
+	<select id="selectModelingList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT MO_UID
+			  ,MO_PROJECT
+			  ,MO_NAME
+			  ,MO_TYPE
+			  ,MO_SX
+			  ,MO_SY
+			  ,MO_EX
+			  ,MO_EY
+			  ,MO_COLOR
+			  ,MO_ROT
+			  ,MO_WIDTH
+			  ,MO_HEIGHT
+			  ,MO_RARDIUS
+			  ,MO_PERSONS
+		  FROM MODELING
+		 WHERE 1=1
+		 <if test="mo_project != null and mo_project != ''">
+		   AND MO_PROJECT = #{mo_project}
+		 </if>
+		 <if test="figProjectUid != null and figProjectUid != ''">
+		   AND MO_PROJECT = #{figProjectUid}
+		 </if>
+		 <if test="figMoUid != null and figMoUid != ''">
+		   AND MO_UID = #{figMoUid}
+		 </if>
+	</select>
+
+	<insert id="insertModelingInfo" parameterType="java.util.Map">
+		INSERT INTO MODELING(
+							 MO_UID
+							,MO_PROJECT
+							,MO_NAME
+							,MO_TYPE
+							,MO_SX
+							,MO_SY
+							,MO_EX
+							,MO_EY
+							,MO_COLOR
+							)VALUES(
+							 (SELECT NVL(MAX(MO_UID)+1,1)
+                                FROM MODELING)
+							,#{mo_project}
+							,#{mo_name,jdbcType=VARCHAR}
+							,#{mo_type}
+							,#{mo_sx}
+							,#{mo_sy}
+							,#{mo_ex}
+							,#{mo_ey}
+							,#{mo_color}
+							)
+		<selectKey keyProperty="mo_uid" resultType="java.lang.String" order="AFTER">
+			SELECT MAX(MO_UID)
+			  FROM MODELING
+		</selectKey>
+	</insert>
+	
+	<update id="updateModelingInfo" parameterType="java.util.Map">
+		UPDATE MODELING
+		   SET MO_PROJECT = #{mo_project}
+		   <if test="mo_name != null and mo_name != ''">
+		      ,MO_NAME = #{mo_name}
+		   </if>
+		   <if test="mo_sx != null and mo_sx != ''">
+		      ,MO_SX = #{mo_sx}
+		   </if>
+		   <if test="mo_sy != null and mo_sy != ''">
+			  ,MO_SY = #{mo_sy}
+		   </if>
+		   <if test="mo_ex != null and mo_ex != ''">
+			  ,MO_EX = #{mo_ex}
+		   </if>
+		   <if test="mo_ey != null and mo_ey != ''">
+			  ,MO_EY = #{mo_ey}
+		   </if>
+		   <if test="mo_color != null and mo_color != ''">
+		   	  ,MO_COLOR = #{mo_color}
+		   </if>
+		   <if test="mo_rot != null and mo_rot != ''">
+		   	  ,MO_ROT = #{mo_rot}
+		   </if>
+		   <if test="mo_width != null and mo_width != ''">
+		   	  ,MO_WIDTH = #{mo_width}
+		   </if>
+		   <if test="mo_height != null and mo_height != ''">
+		   	  ,MO_HEIGHT = #{mo_height}
+		   </if>
+		   <if test="mo_ardius != null and mo_ardius != ''">
+		   	  ,MO_RARDIUS = #{mo_ardius}
+		   </if>
+		   <if test="mo_persons != null and mo_persons != ''">
+		   	  ,MO_PERSONS = #{mo_persons}
+		   </if>
+		 WHERE MO_UID = #{mo_uid}
+		   AND MO_PROJECT = #{mo_project}
+	</update>
+	
+	<delete id="deleteModelingInfo" parameterType="java.util.Map">
+		DELETE
+		  FROM MODELING
+		 WHERE MO_PROJECT = #{mo_project}
+		   AND MO_UID = #{mo_uid}
+	</delete>
+	
+	<select id="selectFiguresList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT FIG_UID            AS figUid
+              ,FIG_MO_UID         AS figMoUid
+              ,FIG_MO_TYPE        AS figMoType
+              ,FIG_MO_NAME        AS figMoName
+              ,FIG_FAIL_MODE      AS figFailMode
+              ,FIG_FAILURE_STATE  AS figFailureState
+              ,FIG_FAILURE_TIME   AS figFailureTime
+              ,FIG_IMP_FAILURE    AS figImpFailure
+              ,FIG_MTTR           AS figMttr
+              ,FIG_IMP_REPAIR     AS figImpRepair
+              ,FIG_REMARK1        AS figRemark1
+              ,FIG_RANDOM_NUM     AS figRandomNum
+              ,FIG_PROJECT_UID    AS figProjectUid
+              ,FIG_DELIVERY       AS figDelivery
+              ,FIG_ART            AS figArt
+              ,TO_CHAR(NVL(FIG_SE_START_DAY, TO_DATE('19000101')), 'YYYY-MM-DD')   AS figSeStartDay
+              ,FIG_FREQ           AS figFreq
+              ,FIG_FREQ_UIT       AS figFreqUit
+              ,FIG_FLARING        AS figFlaring
+              ,FIG_EQ_REF         AS figEqRef
+              ,FIG_DISTRIBUTION   AS figDistribution
+              ,CASE WHEN FIG_DISTRIBUTION = 1 THEN 'Exponential'
+                    WHEN FIG_DISTRIBUTION = 2 THEN 'Normal'
+                    WHEN FIG_DISTRIBUTION = 3 THEN 'Rectangular'
+                    WHEN FIG_DISTRIBUTION = 4 THEN 'Triangular'
+                    WHEN FIG_DISTRIBUTION = 5 THEN 'Weibull(no delay)'
+                    WHEN FIG_DISTRIBUTION = 6 THEN 'Weibull(time delay)'
+               END AS figDistributionName
+              ,FIG_EXP_MTTF       AS figExpMttf
+              ,FIG_NORM_EXPT_MTTF AS figNormExptMttf
+              ,FIG_MIN_MTTF       AS figMinMttf
+              ,FIG_MAX_MTTF       AS figMaxMttf
+              ,FIG_MOST_MTTF      AS figMostMttf
+              ,FIG_WEI_CHAR_MTTF  AS figWeiCharMttf
+              ,FIG_WEI_SHAPE_MTTF AS figWeiShapeMttf
+              ,FIG_NORM_STD_MTTF  AS figNormStdMttf
+              ,FIG_WEI_DELTIME    AS figWeiDeltime
+              ,FIG_IMP_RECOV      AS figImpRecov
+              ,FIG_SUBSYSTEM      AS figSubsystem
+              ,FIG_TAGID          AS figTagid
+              ,FIG_REP_DISTRIBUTION AS figRepDistribution
+              ,FIG_REP_MOD_RELIA  AS figRepModRelia
+              ,FIG_REP_REPEAT     AS figRepRepeat
+              ,FIG_REP_UPTO       AS figRepUpto
+              ,FIG_CAP_LOSS       AS figCapLoss
+    	  FROM FIGURES
+    	 WHERE FIG_MO_UID = #{figMoUid}
+    	   AND FIG_PROJECT_UID = #{figProjectUid}
+    	 <if test="figUid != null and figUid != ''">
+    	   AND FIG_UID = #{figUid}
+    	 </if>
+      ORDER BY figUid
+	</select>
+	
+	<insert id="insertFigures" parameterType="java.util.Map">
+		INSERT INTO FIGURES(
+    		 FIG_UID
+    		,FIG_PROJECT_UID
+    		,FIG_MO_UID
+    		,FIG_MO_TYPE
+    		,FIG_MO_NAME
+    		,FIG_SUBSYSTEM
+    		,FIG_FAIL_MODE
+    		,FIG_FAILURE_TIME
+    		,FIG_IMP_FAILURE
+    		,FIG_MTTR
+    		,FIG_IMP_REPAIR
+    		,FIG_DELIVERY
+    		,FIG_ART
+    		,FIG_FREQ
+    		,FIG_FREQ_UIT
+    		,FIG_DISTRIBUTION
+    		,FIG_EXP_MTTF
+    		,FIG_NORM_EXPT_MTTF
+    		,FIG_MIN_MTTF
+    		,FIG_MAX_MTTF
+    		,FIG_MOST_MTTF
+    		,FIG_WEI_CHAR_MTTF
+    		,FIG_WEI_SHAPE_MTTF
+    		,FIG_NORM_STD_MTTF
+    		,FIG_WEI_DELTIME
+    		,FIG_IMP_RECOV
+    		,FIG_TAGID
+    		,FIG_REP_DISTRIBUTION
+    		,FIG_REP_MOD_RELIA
+    		,FIG_REP_REPEAT
+    		,FIG_REP_UPTO
+    		,FIG_CAP_LOSS
+    	)VALUES(
+    		 (SELECT NVL(MAX(FIG_UID)+1,1)
+                FROM FIGURES)
+    		,#{figProjectUid,jdbcType=VARCHAR}
+    		,#{figMoUid}
+    		,#{figMoType,jdbcType=VARCHAR}
+    		,#{figMoName,jdbcType=VARCHAR}
+    		,#{figSubsystem,jdbcType=VARCHAR}
+    		,#{figFailMode,jdbcType=VARCHAR}
+    		,#{figFailureTime,jdbcType=VARCHAR}
+    		,#{figImpFailure,jdbcType=VARCHAR}
+    		,#{figMttr,jdbcType=VARCHAR}
+    		,#{figImpRepair,jdbcType=VARCHAR}
+    		,#{figDelivery,jdbcType=VARCHAR}
+    		,#{figMttr,jdbcType=VARCHAR}
+    		,#{figFreq,jdbcType=VARCHAR}
+    		,#{figFreqUit,jdbcType=VARCHAR}
+    		,#{figDistribution,jdbcType=VARCHAR}
+    		,#{figFailureTime,jdbcType=VARCHAR}
+    		,#{figNormExptMttf,jdbcType=VARCHAR}
+    		,#{figMinMttf,jdbcType=VARCHAR}
+    		,#{figMaxMttf,jdbcType=VARCHAR}
+    		,#{figMostMttf,jdbcType=VARCHAR}
+    		,#{figWeiCharMttf,jdbcType=VARCHAR}
+    		,#{figWeiShapeMttf,jdbcType=VARCHAR}
+    		,#{figNormStdMttf,jdbcType=VARCHAR}
+    		,#{figWeiDeltime,jdbcType=VARCHAR}
+    		,#{figImpRecov,jdbcType=VARCHAR}
+    		,#{figTagid,jdbcType=VARCHAR}
+    		,#{figRepDistribution,jdbcType=VARCHAR}
+    		,#{figRepModRelia,jdbcType=VARCHAR}
+    		,#{figRepRepeat,jdbcType=VARCHAR}
+    		,#{figRepUpto,jdbcType=VARCHAR}
+    		,#{figCapLoss,jdbcType=VARCHAR}
+    	)
+    	<selectKey keyProperty="figUid" resultType="java.lang.String" order="AFTER">
+			SELECT NVL(MAX(FIG_UID)+1,1)
+              FROM FIGURES
+		</selectKey>
+	</insert>
+	
+	<update id="updateFigures" parameterType="java.util.Map">
+		UPDATE FIGURES
+    	   SET FIG_MO_NAME = #{figMoName,jdbcType=VARCHAR}
+    	      ,FIG_SUBSYSTEM = #{figSubsystem,jdbcType=VARCHAR}
+    	      ,FIG_FAIL_MODE = #{figFailMode,jdbcType=VARCHAR}
+    	      ,FIG_FAILURE_TIME = #{figFailureTime,jdbcType=VARCHAR}
+    	      ,FIG_IMP_FAILURE = #{figImpFailure,jdbcType=VARCHAR}
+    	      ,FIG_MTTR = #{figMttr,jdbcType=VARCHAR}
+    	      ,FIG_IMP_REPAIR = #{figImpRepair,jdbcType=VARCHAR}
+    	      ,FIG_DELIVERY = #{figDelivery,jdbcType=VARCHAR}
+    	      ,FIG_ART = #{figMttr,jdbcType=VARCHAR}
+    	      ,FIG_FREQ = #{figFreq,jdbcType=VARCHAR}
+    	      ,FIG_FREQ_UIT = #{figFreqUit,jdbcType=VARCHAR}
+    	      ,FIG_DISTRIBUTION = #{figDistribution,jdbcType=VARCHAR}
+    	      ,FIG_EXP_MTTF = #{figFailureTime,jdbcType=VARCHAR}
+    	      ,FIG_NORM_EXPT_MTTF = #{figNormExptMttf,jdbcType=VARCHAR}
+    	      ,FIG_MIN_MTTF = #{figMinMttf,jdbcType=VARCHAR}
+    	      ,FIG_MAX_MTTF = #{figMaxMttf,jdbcType=VARCHAR}
+    	      ,FIG_MOST_MTTF = #{figMostMttf,jdbcType=VARCHAR}
+    	      ,FIG_WEI_CHAR_MTTF = #{figWeiCharMttf,jdbcType=VARCHAR}
+    	      ,FIG_WEI_SHAPE_MTTF = #{figWeiShapeMttf,jdbcType=VARCHAR}
+    	      ,FIG_NORM_STD_MTTF = #{figNormStdMttf,jdbcType=VARCHAR}
+    	      ,FIG_WEI_DELTIME = #{figWeiDeltime,jdbcType=VARCHAR}
+    	      ,FIG_IMP_RECOV = #{figImpRecov,jdbcType=VARCHAR}
+    	      ,FIG_TAGID = #{figTagid,jdbcType=VARCHAR}
+    	      ,FIG_REP_DISTRIBUTION = #{figRepDistribution,jdbcType=VARCHAR}
+    	      ,FIG_REP_MOD_RELIA = #{figRepModRelia,jdbcType=VARCHAR}
+    	      ,FIG_REP_REPEAT = #{figRepRepeat,jdbcType=VARCHAR}
+    	      ,FIG_REP_UPTO = #{figRepUpto,jdbcType=VARCHAR}
+    	      ,FIG_CAP_LOSS = #{figCapLoss,jdbcType=VARCHAR}
+    	 WHERE FIG_UID = #{figUid}
+	</update>
+	
+	<delete id="deleteFigures" parameterType="java.util.Map">
+		DELETE
+    	  FROM FIGURES
+    	 WHERE 1=1
+    	  <if test="figUid != null and figUid != ''">
+    	   AND FIG_UID = #{figUid}
+    	  </if>
+    	  <if test="figMoUid != null and figMoUid != ''">
+    	   AND FIG_MO_UID = #{figMoUid}
+    	  </if>
+    	  <if test="figProjectUid != null and figProjectUid != ''">
+    	   AND FIG_PROJECT_UID = #{figProjectUid}
+    	  </if>
+    	  <if test="mo_uid != null and mo_uid != ''">
+    	   AND FIG_MO_UID = #{mo_uid}
+    	  </if>
+	</delete>
+	
+</mapper>
