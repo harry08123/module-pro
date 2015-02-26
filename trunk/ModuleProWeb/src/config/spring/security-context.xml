@@ -16,7 +16,12 @@
     		default-target-url="/projectNew.do"
 			authentication-failure-url="/loginFail.do"
 			/>		
-    	<security:logout logout-success-url="/index.do"/>    	    	
+    	<security:logout logout-success-url="/index.do"/>
+    	
+    	<security:intercept-url pattern="/print/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    	<security:intercept-url pattern="/editor.do" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    	<security:intercept-url pattern="/popupProperties.do" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    	<security:intercept-url pattern="/updateEditorProject.do" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </security:http>
     
    <security:authentication-manager >    	    	
