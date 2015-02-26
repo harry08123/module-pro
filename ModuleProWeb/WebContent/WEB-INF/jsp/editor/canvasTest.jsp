@@ -877,6 +877,14 @@ $(function(){
 		}
 	});
 	
+	$("#checkall").click(function(){
+		var checked = this.checked;
+		$(".checkbox").prop("checked", checked);
+		$.each(arRectangle, function(index, item){
+			item.mflag = checked;
+		});
+	});
+	
 });
 
 function contextFn(key){
@@ -924,7 +932,7 @@ function saveModelingInfo(){
 			arRectangle[selectedRect].id = data.mo_uid;
 			if(drawing){
 				var tag = "<tr id='row_"+data.mo_uid+"'>"+
-						  "<td><input id='fig_"+data.mo_uid+"' type='checkbox' checked='checked' onchange=\"changeFigMovind('"+data.mo_uid+"')\"></td>"+
+						  "<td><input id='fig_"+data.mo_uid+"' type='checkbox' class='checkbox' checked='checked' onchange=\"changeFigMoving('"+data.mo_uid+"')\"></td>"+
 						  "<td>"+data.mo_uid+"</td>"+
 						  "</tr>";
 				$("#figures").append(tag);
@@ -1020,7 +1028,7 @@ function getRectPersons(id){
 	return persons;
 }
 
-function changeFigMovind(id){
+function changeFigMoving(id){
 	$.each(arRectangle, function(index, item){
 		if(item.id == id){
 			item.mflag = $("#fig_"+id).is(":checked");
@@ -1106,14 +1114,14 @@ function isNull(obj){
 				<table style="border: 1px solid #ccc; width: 100%;">
 					<thead>
 						<tr>
-							<th style="width: 30px;"></th>
+							<th style="width: 30px;"><input type="checkbox" id="checkall" checked="checked"></th>
 							<th>도형</th>
 						</tr>
 					</thead>
 					<tbody id="figures">
 						<c:forEach items="${modelingList}" var="modelingList">
 							<tr id="row_${modelingList.MO_UID }">
-								<td><input id="fig_${modelingList.MO_UID }" type="checkbox" checked="checked" onchange="changeFigMovind('${modelingList.MO_UID }')"></td>
+								<td><input id="fig_${modelingList.MO_UID }" type="checkbox" class="checkbox" checked="checked" onchange="changeFigMoving('${modelingList.MO_UID }')"></td>
 								<td>${modelingList.MO_NAME eq null ? modelingList.MO_UID : modelingList.MO_NAME }</td>
 							</tr>
 						</c:forEach>
