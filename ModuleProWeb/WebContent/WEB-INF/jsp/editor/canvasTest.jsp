@@ -517,11 +517,11 @@ $(function(){
 				
 			}else{
 				if((lineFirstSx < sx+lineGap && lineFirstSx > sx-lineGap) && (lineFirstSy < sy+lineGap && lineFirstSy > sy-lineGap)){
-					arLine.push(new Line(lineID, lineSx, lineSy, lineFirstSx, lineFirstSy, "yellow"));
+					arLine.push(new Line(lineID, lineSx, lineSy, lineFirstSx, lineFirstSy, "green"));
 					drawing = false;
 					lineFirstSx = -1;
 					lineFirstSy = -1;
-					moType = "rect";
+					//moType = "rect";
 					
 					var overlapRectIDList = getOverlapRectID(lineID);
 					
@@ -559,7 +559,7 @@ $(function(){
 					$("#density").append(tag);
 					
 				}else{
-					arLine.push(new Line(lineID, lineSx, lineSy, sx, sy, "yellow"));
+					arLine.push(new Line(lineID, lineSx, lineSy, sx, sy, "green"));
 				}
 				
 				drawRects();
@@ -623,7 +623,7 @@ $(function(){
 						ctx.arc((arcStd)/2+sx, (arcStd)/2+sy, (Math.abs(arcStd))/2, 0, 2*Math.PI);
 						ctx.stroke();
 					}else if(moType == "line"){
-						drawLine(sx, sy, ex, ey, "yellow");
+						drawLine(sx, sy, ex, ey, "green");
 					}
 	
 				}
@@ -742,9 +742,9 @@ $(function(){
 			if(drawing){
 				drawRects();
 				if((lineFirstSx < ex+lineGap && lineFirstSx > ex-lineGap) && (lineFirstSy < ey+lineGap && lineFirstSy > ey-lineGap)){
-					drawLine(sx, sy, lineFirstSx, lineFirstSy, "yellow");
+					drawLine(sx, sy, lineFirstSx, lineFirstSy, "green");
 				}else{
-					drawLine(sx, sy, ex, ey, "yellow");
+					drawLine(sx, sy, ex, ey, "green");
 				}
 			}
 		}
@@ -1103,7 +1103,7 @@ function isNull(obj){
 				<button id="rect" onclick="selectMotype('rect')">사각형</button>
 				<button id="arc" onclick="selectMotype('arc')">원</button><br/><br/>
 				<button id="line" onclick="selectMotype('line')">중복면적</button>
-				<button id="line" onclick="lineBack()">뒤로</button><br/><br/>
+				<!-- <button id="line" onclick="lineBack()">뒤로</button><br/><br/> -->
 				<input id="noIndColor" class="colorPicker evo-cp8" style="display: none;"><br/>
 				<input type="file" name="file" onchange="printChange(this);" style="width: 77px;"><br/>
 				<!-- <div style="display: none;">
@@ -1115,7 +1115,7 @@ function isNull(obj){
 					<thead>
 						<tr>
 							<th style="width: 30px;"><input type="checkbox" id="checkall" checked="checked"></th>
-							<th>도형</th>
+							<th>전체선택</th>
 						</tr>
 					</thead>
 					<tbody id="figures">
