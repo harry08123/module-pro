@@ -100,7 +100,7 @@ function Rectangle(sx, sy, ex, ey, color) {
 	this.rot = 0;
 	this.availability = -1;
 	this.density = -1;
-	this.mflag = true;
+	this.mflag = false;
 }
 
 //Line 생성자
@@ -129,7 +129,7 @@ function canvasY(clientY) {
 function getRectangle(x, y) {
 	for (var i = 0;i < arRectangle.length;i++) {
 		var rect = arRectangle[i];
-		if(!rect.mflag || moType == "line"){
+		if(rect.mflag || moType == "line"){
 			if (x > rect.sx-lineGap && x < rect.ex+lineGap && y > rect.sy-lineGap && y < rect.ey+lineGap) {
 				return i;
 			}
@@ -184,7 +184,7 @@ function getFindEdge(x, y) {
 	*/
 	for (var i = 0;i < arRectangle.length;i++) {
 		var rect = arRectangle[i];
-		if(!rect.mflag){
+		if(rect.mflag){
 			if(rect.type != "line"){
 				if(x > rect.sx - lineGap && x < rect.sx + lineGap && y > rect.sy + lineGap && y < rect.ey - lineGap){		//왼쪽
 					edgeObj.i = i;
@@ -295,7 +295,7 @@ function drawRects() {
 			ctx.fillStyle = "red";
 			ctx.fillText(r.availability + "%", r.sx+5,r.sy);
 			
-			var fontGap = 0;
+			/* var fontGap = 0;
 			if(r.availability != 0){
 				fontGap = 50;
 			}
@@ -306,7 +306,7 @@ function drawRects() {
 			else if(Number(r.density) < 80 && Number(r.density) > 59){fontColor = "orange";}
 			ctx.font="bold 14px 고딕";
 			ctx.fillStyle = fontColor;
-			ctx.fillText("["+(Math.round(r.density*100)/100)+"%]", r.sx+30+fontGap,r.sy);
+			ctx.fillText("["+(Math.round(r.density*100)/100)+"%]", r.sx+30+fontGap,r.sy); */
 		}
 		
 		if(r.type != "line"){
@@ -572,7 +572,8 @@ $(function(){
 					var area = polygonArea(overlapPoint.xArr, overlapPoint.yArr, overlapPoint.numPoints);
 					area = Math.abs(area);
 					
-					var density = Math.round(Number(area)/Number(persons));
+					console.log(persons + " / " + area + " = " + Number(persons)/Number(area));
+					var density = Math.round(Number(persons)/Number(area)*100);
 					
 					var tag = "<tr>"+
 							  "<td class='rectnumber' style='width:127px;'>"+rectNames+"</td>"+
@@ -903,6 +904,14 @@ $(function(){
 		}
 	});
 	
+	$("#checkall").click(function(){
+		var checked = this.checked;
+		$(".checkbox").prop("checked", checked);
+		$.each(arRectangle, function(index, item){
+			item.mflag = checked;
+		});
+	});
+	
 });
 
 function contextFn(key){
@@ -950,7 +959,7 @@ function saveModelingInfo(){
 			arRectangle[selectedRect].id = data.mo_uid;
 			if(drawing){
 				var tag = "<tr id='row_"+data.mo_uid+"'>"+
-						  "<td class='check-form'><input id='fig_"+data.mo_uid+"' type='checkbox' checked='checked' onchange=\"changeFigMovind('"+data.mo_uid+"')\"></td>"+
+						  "<td class='check-form'><input id='fig_"+data.mo_uid+"' class='checkbox' type='checkbox' onchange=\"changeFigMovind('"+data.mo_uid+"')\"></td>"+
 						  "<td>"+data.mo_uid+"</td>"+
 						  "</tr>";
 				$("#figures").append(tag);
@@ -1169,13 +1178,13 @@ function isNull(obj){
 		<div class="result-wrap01">
 			<table cellspacing="0" cellpadding="0">
 				<thead><tr>
-					<th class="check-form"><input type="checkbox" id="checkall" checked="checked"></th>
+					<th class="check-form"><input type="checkbox" id="checkall" ></th>
 					<th>도형</th>
 				</tr></thead>
 				<tbody id="figures">
 				<c:forEach items="${modelingList}" var="modelingList">
 				<tr id="row_${modelingList.MO_UID }">
-					<td class="check-form"><input id="fig_${modelingList.MO_UID }" type="checkbox" checked="checked" onchange="changeFigMovind('${modelingList.MO_UID }')"></td>
+					<td class="check-form"><input id="fig_${modelingList.MO_UID }" class="checkbox" type="checkbox" onchange="changeFigMovind('${modelingList.MO_UID }')"></td>
 					<td>${modelingList.MO_NAME eq null ? modelingList.MO_UID : modelingList.MO_NAME }</td>
 				</tr>
 				</c:forEach>
@@ -1193,54 +1202,6 @@ function isNull(obj){
 						<th class="sec" style="width:43px;">삭제</th>
 				</tr></thead>
 				<tbody id="density">
-					<tr>
-						<td class='rectnumber' style='width:90px;'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-						<td class='rectnumber' id='area' style='text-align: right; width:45px;'>1234567</td>
-						<td class='rectnumber' style='text-align: right; width:58px;'>1234567%</td>
-						<td style='text-align: center; width:16px;'>
-						<img src="<c:url value='/images/icons/cross.png'/>" style='cursor: pointer;'>
-						</td>
-					</tr>
-					<tr>
-						<td class='rectnumber' style='width:90px;'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-						<td class='rectnumber' id='area' style='text-align: right; width:45px;'>1234567</td>
-						<td class='rectnumber' style='text-align: right; width:58px;'>1234567%</td>
-						<td style='text-align: center; width:16px;'>
-						<img src="<c:url value='/images/icons/cross.png'/>" style='cursor: pointer;'>
-						</td>
-					</tr>
-					<tr>
-						<td class='rectnumber' style='width:90px;'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-						<td class='rectnumber' id='area' style='text-align: right; width:45px;'>1234567</td>
-						<td class='rectnumber' style='text-align: right; width:58px;'>1234567%</td>
-						<td style='text-align: center; width:16px;'>
-						<img src="<c:url value='/images/icons/cross.png'/>" style='cursor: pointer;'>
-						</td>
-					</tr>
-					<tr>
-						<td class='rectnumber' style='width:90px;'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-						<td class='rectnumber' id='area' style='text-align: right; width:45px;'>1234567</td>
-						<td class='rectnumber' style='text-align: right; width:58px;'>1234567%</td>
-						<td style='text-align: center; width:16px;'>
-						<img src="<c:url value='/images/icons/cross.png'/>" style='cursor: pointer;'>
-						</td>
-					</tr>
-					<tr>
-						<td class='rectnumber' style='width:90px;'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-						<td class='rectnumber' id='area' style='text-align: right; width:45px;'>1234567</td>
-						<td class='rectnumber' style='text-align: right; width:58px;'>1234567%</td>
-						<td style='text-align: center; width:16px;'>
-						<img src="<c:url value='/images/icons/cross.png'/>" style='cursor: pointer;'>
-						</td>
-					</tr>
-					<tr>
-						<td class='rectnumber' style='width:90px;'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-						<td class='rectnumber' id='area' style='text-align: right; width:45px;'>1234567</td>
-						<td class='rectnumber' style='text-align: right; width:58px;'>1234567%</td>
-						<td style='text-align: center; width:16px;'>
-						<img src="<c:url value='/images/icons/cross.png'/>" style='cursor: pointer;'>
-						</td>
-					</tr>
 				</tbody>
 			</table>
 		</div>
