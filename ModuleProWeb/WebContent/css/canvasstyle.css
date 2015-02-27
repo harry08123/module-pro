@@ -52,10 +52,9 @@ html, body, ul, li, input {
 	border-left:1px solid #666;
 }
 .top-menu li:first-child {
-	border-right:1px solid #666;
 	padding:10px 20px;
 }
-.top-menu li:first-child, .top-menu li:last-child {
+.top-menu li:first-child {
 	border-left:0;
 }
 .top-menu li input[type="file"] {
@@ -74,12 +73,12 @@ html, body, ul, li, input {
 	position:relative;
 	top:-4px;
 }
-.color-pic div {
+.color-pic>div {
 	height:20px;
 	position:relative;
 	top:4px;
 }
-.color-pic div div {
+.color-pic>div>div {
 	background:#fff;
 	margin-left:5px;
 	top:-5px;
@@ -105,6 +104,7 @@ html, body, ul, li, input {
 #totAvailability {
 	background:#fff;
 	height:16px;
+	color:black;
 }
 .simul-wrap table th {
 	font-weight:normal;
@@ -123,7 +123,7 @@ html, body, ul, li, input {
 }
 .totAvailability th, .totAvailability td {
 	padding-top:6px;
-	border-top:1px solid #8dbddc;
+	border-top:1px solid #f4af5f;
 }
 .result-wrap01, .result-wrap02 {
 	width:296px;
