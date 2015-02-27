@@ -543,11 +543,11 @@ $(function(){
 				
 			}else{
 				if((lineFirstSx < sx+lineGap && lineFirstSx > sx-lineGap) && (lineFirstSy < sy+lineGap && lineFirstSy > sy-lineGap)){
-					arLine.push(new Line(lineID, lineSx, lineSy, lineFirstSx, lineFirstSy, "yellow"));
+					arLine.push(new Line(lineID, lineSx, lineSy, lineFirstSx, lineFirstSy, "green"));
 					drawing = false;
 					lineFirstSx = -1;
 					lineFirstSy = -1;
-					moType = "rect";
+					//moType = "rect";
 					
 					var overlapRectIDList = getOverlapRectID(lineID);
 					
@@ -586,7 +586,7 @@ $(function(){
 					$("#density").append(tag);
 					
 				}else{
-					arLine.push(new Line(lineID, lineSx, lineSy, sx, sy, "yellow"));
+					arLine.push(new Line(lineID, lineSx, lineSy, sx, sy, "green"));
 				}
 				
 				drawRects();
@@ -650,7 +650,7 @@ $(function(){
 						ctx.arc((arcStd)/2+sx, (arcStd)/2+sy, (Math.abs(arcStd))/2, 0, 2*Math.PI);
 						ctx.stroke();
 					}else if(moType == "line"){
-						drawLine(sx, sy, ex, ey, "yellow");
+						drawLine(sx, sy, ex, ey, "green");
 					}
 	
 				}
@@ -769,9 +769,9 @@ $(function(){
 			if(drawing){
 				drawRects();
 				if((lineFirstSx < ex+lineGap && lineFirstSx > ex-lineGap) && (lineFirstSy < ey+lineGap && lineFirstSy > ey-lineGap)){
-					drawLine(sx, sy, lineFirstSx, lineFirstSy, "yellow");
+					drawLine(sx, sy, lineFirstSx, lineFirstSy, "green");
 				}else{
-					drawLine(sx, sy, ex, ey, "yellow");
+					drawLine(sx, sy, ex, ey, "green");
 				}
 			}
 		}
@@ -862,6 +862,7 @@ $(function(){
 			data : formData,
 			success : function(data){
 				totAvailability = ((data.totAvailability).toString()).substr(0, 7);
+				console.log(totAvailability);
 				$("#totAvailability").html(totAvailability);
 			},
 			error : function() {
@@ -1197,9 +1198,9 @@ function isNull(obj){
 					<tr><th colspan="4">중복 범위 작업밀도</th></tr>
 					<tr>
 						<th class="sec">중복명</th>
-						<th class="sec" style="width:53px;">면적</th>
-						<th class="sec" style="width:60px;">밀도</th>
-						<th class="sec" style="width:43px;">삭제</th>
+						<th class="sec" style="width:45px;">면적</th>
+						<th class="sec" style="width:50px;">밀도</th>
+						<th class="sec" style="width:37px;">삭제</th>
 				</tr></thead>
 				<tbody id="density">
 				</tbody>
